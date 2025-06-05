@@ -1,5 +1,5 @@
 # Stage 1: Build the app
-FROM node:24-alpine AS builder
+FROM node:24 AS builder
 
 WORKDIR /app
 
@@ -11,6 +11,9 @@ RUN npm run build
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
+
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
 
 # Copy build to nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
