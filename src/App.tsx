@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -12,9 +12,15 @@ type ErrorResponse = {
     message: string
 }
 
+const apiHost = import.meta.env.VITE_API_HOST
+const apiPort = import.meta.env.VITE_API_PORT
+const apiEndpoint = `${apiHost}:${apiPort}`
+
+
 function App() {
     const [response, setResponse] = useState<ApiResponse | null>(null)
     const [error, setError] = useState<string | null>(null)
+    const [status, setStatus] = useState<string | null>(null)
 
     const makeApiCall = async (
         apiCall: () => Promise<Response>
@@ -39,7 +45,7 @@ function App() {
     const postRequest = async (url: string) => {
 
         await makeApiCall(
-            () => fetch(`http://localhost:8080/${url}`, {
+            () => fetch(`${apiEndpoint}/${url}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,6 +53,23 @@ function App() {
             })
         )
     }
+
+    useEffect(() => {
+        const fetchHealth = async () => {
+            try {
+                const res = await fetch(`${apiEndpoint}/actuator/health`)
+
+                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
+
+                const json = await res.json()
+                setStatus(json.status)
+            } catch (err: any) {
+                setStatus(err.message)
+            }
+        };
+
+        fetchHealth();
+    }, []);
 
     return (
         <>
@@ -104,6 +127,9 @@ function App() {
                     {error && <><span className="error">Error: </span>{error}</>}
                 </p>
             </div>
+            <p>
+                Endpoint: {apiEndpoint} Health: {status}
+            </p>
             <p className="read-the-docs">
                 Developed in house by Joe Lin 2025
             </p>
