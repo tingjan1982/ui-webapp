@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
+import FileUploadModal from "./FileUploadModal.tsx";
 
 type ApiResponse = {
     message: String
@@ -21,6 +22,8 @@ function App() {
     const [response, setResponse] = useState<ApiResponse | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [status, setStatus] = useState<string | null>(null)
+    const [modalType, setModalType] = useState<string | null>(null)
+
 
     const makeApiCall = async (
         apiCall: () => Promise<Response>
@@ -54,6 +57,19 @@ function App() {
         )
     }
 
+    const postFileRequest = async (url: string, file: File) => {
+
+        const formData: FormData = new FormData()
+        formData.append('file', file)
+
+        await makeApiCall(
+            () => fetch(`${apiEndpoint}/${url}`, {
+                method: 'POST',
+                body: formData
+            })
+        )
+    }
+
     useEffect(() => {
         const fetchHealth = async () => {
             try {
@@ -75,10 +91,7 @@ function App() {
         <>
             <h1>UI Dashboard</h1>
             <p>Use the following links to access information</p>
-            <a target="_blank" rel="noopener noreferrer"
-               href="https://docs.google.com/spreadsheets/d/106RJju-J-NNvnu_TdfbxbZZUFUgIAp_Xheu3KKzE2dU/edit?pli=1&gid=638336203#gid=638336203">
-                Cost Analysis
-            </a>
+
             {/*<div>
                 <a href="https://vite.dev" target="_blank">
                     <img src={viteLogo} className="logo" alt="Vite logo"/>
@@ -89,21 +102,30 @@ function App() {
             </div>*/}
             <div className="container">
                 <div className="column">
-                    <h3>Finance Functions</h3>
+                    <h3>Transaction Functions</h3>
+                    <a target="_blank" rel="noopener noreferrer"
+                       href="https://docs.google.com/spreadsheets/d/106RJju-J-NNvnu_TdfbxbZZUFUgIAp_Xheu3KKzE2dU/edit?pli=1&gid=638336203#gid=638336203">
+                        Cash Position
+                    </a>
                     <div className="column">
-                        <button onClick={() => postRequest('sheets/updateCashPosition')}>
-                            Update Cash Position
-                        </button>
-                        <button onClick={() => postRequest('/sheets/syncPayments')}>
+
+                        <button onClick={() => setModalType('Cash Position')}>Update Cash Position</button>
+                        <FileUploadModal key={'1' + modalType} open={modalType === 'Cash Position'} onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)} />
+
+                        <button onClick={() => setModalType('Bank Transaction')}>Sync Bank Transactions</button>
+                        <FileUploadModal key={'2' + modalType} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('transactions/sync', file)} />
+
+                        <button onClick={() => postRequest('sheets/syncPayments')}>
                             Sync Planned Payments
-                        </button>
-                        <button onClick={() => postRequest('transactions/sync')}>
-                            Sync Bank Transactions
                         </button>
                     </div>
                 </div>
                 <div className="column">
-                    <h3>Invoice Functions</h3>
+                    <h3>Cost Analysis Functions</h3>
+                    <a target="_blank" rel="noopener noreferrer"
+                       href="https://docs.google.com/spreadsheets/d/1XLHMC8oM8jnfCtdh_KoFmd871lzaIBGOUVQATvzZFoE/edit?pli=1&gid=345099240#gid=345099240">
+                        Cost Analysis
+                    </a>
                     <div className="column">
                         <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
                             Populate RBG Invoices
