@@ -2,12 +2,13 @@ import * as Dialog from '@radix-ui/react-dialog';
 import React, {useState} from 'react';
 
 interface FileUploadModalProps {
-    open: boolean;
-    onClose: () => void;
-    onUpload: (file: File) => void;
+    name: string
+    open: boolean,
+    onClose: () => void,
+    onUpload: (file: File) => void,
 }
 
-const FileUploadModal: React.FC<FileUploadModalProps> = ({open, onClose, onUpload}) => {
+const FileUploadModal: React.FC<FileUploadModalProps> = ({open, onClose, onUpload, name}) => {
     const [file, setFile] = useState<File | null>(null)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +41,7 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({open, onClose, onUploa
                     transform: 'translate(-50%, -50%)',
                     minWidth: 500
                 }}>
-                    <Dialog.Title>Finance Function</Dialog.Title>
+                    <Dialog.Title>{name}</Dialog.Title>
                     <Dialog.Description>
                         Select a file and click upload to run the function.
                     </Dialog.Description>

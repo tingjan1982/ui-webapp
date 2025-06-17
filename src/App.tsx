@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react'
 // import viteLogo from '/vite.svg'
 import './App.css'
 import FileUploadModal from "./FileUploadModal.tsx";
+import {ACTIONS} from "./constants.tsx";
 
 type ApiResponse = {
     message: String
@@ -109,11 +110,13 @@ function App() {
                     </a>
                     <div className="column">
 
-                        <button onClick={() => setModalType('Cash Position')}>Update Cash Position</button>
-                        <FileUploadModal key={'1' + modalType} open={modalType === 'Cash Position'} onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)} />
+                        <button onClick={() => setModalType(ACTIONS.updateCashPosition)}>{ACTIONS.updateCashPosition}</button>
+                        <FileUploadModal key={'1' + modalType} name={ACTIONS.updateCashPosition} open={modalType === ACTIONS.updateCashPosition} onClose={() => setModalType(null)}
+                                         onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)}/>
 
                         <button onClick={() => setModalType('Bank Transaction')}>Sync Bank Transactions</button>
-                        <FileUploadModal key={'2' + modalType} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('transactions/sync', file)} />
+                        <FileUploadModal key={'2' + modalType} name={ACTIONS.syncBankTransactions} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)}
+                                         onUpload={(file) => postFileRequest('transactions/sync', file)}/>
 
                         <button onClick={() => postRequest('sheets/syncPayments')}>
                             Sync Planned Payments
@@ -130,12 +133,13 @@ function App() {
                         <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
                             Populate RBG Invoices
                         </button>
-                        <button onClick={() => postRequest('statements/card1212')}>
-                            Import Credit Card Statement 1212
-                        </button>
-                        <button onClick={() => postRequest('statements/card0296')}>
-                            Import Credit Card Statement 0296
-                        </button>
+                        <button onClick={() => setModalType(ACTIONS.importCard1212)}>{ACTIONS.importCard1212}</button>
+                        <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard1212} open={modalType === ACTIONS.importCard1212} onClose={() => setModalType(null)}
+                                         onUpload={(file) => postFileRequest('statements/card1212', file)}/>
+
+                        <button onClick={() => setModalType(ACTIONS.importCard0296)}>{ACTIONS.importCard0296}</button>
+                        <FileUploadModal key={'4' + modalType} name={ACTIONS.importCard0296} open={modalType === ACTIONS.importCard0296} onClose={() => setModalType(null)}
+                                         onUpload={(file) => postFileRequest('statements/card0296', file)}/>
                     </div>
                 </div>
             </div>
