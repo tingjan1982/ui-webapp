@@ -4,6 +4,9 @@ import {useEffect, useState} from 'react'
 import './App.css'
 import FileUploadModal from "./FileUploadModal.tsx";
 import {ACTIONS} from "./constants.tsx";
+import 'nprogress/nprogress.css';
+import NProgress from 'nprogress';
+
 
 type ApiResponse = {
     message: String
@@ -30,8 +33,10 @@ function App() {
         apiCall: () => Promise<Response>
     ) => {
         try {
+            NProgress.start()
+
             setError(null)
-            setResponse(null)
+            setResponse({message: 'Processing'})
 
             const res = await apiCall()
 
@@ -43,6 +48,10 @@ function App() {
             setResponse(data)
         } catch (err: any) {
             setError(err.message)
+            setResponse(null)
+
+        } finally {
+            NProgress.done()
         }
     }
 
