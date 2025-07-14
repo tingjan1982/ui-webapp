@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
+import cfLogo from './assets/cf-logo.svg'
 import './App.css'
 import FileUploadModal from "./FileUploadModal.tsx";
 import {ACTIONS} from "./constants.tsx";
@@ -99,6 +100,9 @@ function App() {
 
     return (
         <>
+            <div className="logoContainer">
+                <img src={cfLogo} className="logo" alt="Central Fair Group logo"/>
+            </div>
             <h1>UI Dashboard</h1>
             <p>Use the following links to access information</p>
 
@@ -149,6 +153,9 @@ function App() {
                         <button onClick={() => setModalType(ACTIONS.importCard0296)}>{ACTIONS.importCard0296}</button>
                         <FileUploadModal key={'4' + modalType} name={ACTIONS.importCard0296} open={modalType === ACTIONS.importCard0296} onClose={() => setModalType(null)}
                                          onUpload={(file) => postFileRequest('statements/card0296', file)}/>
+                        <button onClick={() => postRequest('statements/populateExpenseTasks')}>
+                            Populate CU Expense Tasks
+                        </button>
                     </div>
                 </div>
             </div>
@@ -163,7 +170,7 @@ function App() {
                 </p>
             </div>
             <p>
-                Endpoint: {apiEndpoint} Health: {status}
+                Endpoint: {apiEndpoint} Health: {status} App Version: {__APP_VERSION__}
             </p>
             <p className="read-the-docs">
                 Developed in house by Joe Lin 2025
