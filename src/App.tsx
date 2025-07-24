@@ -146,13 +146,10 @@ function App() {
                         <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
                             Populate RBG Invoices
                         </button>
-                        <button onClick={() => setModalType(ACTIONS.importCard1212)}>{ACTIONS.importCard1212}</button>
-                        <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard1212} open={modalType === ACTIONS.importCard1212} onClose={() => setModalType(null)}
-                                         onUpload={(file) => postFileRequest('statements/card1212', file)}/>
+                        <button onClick={() => setModalType(ACTIONS.importCard)}>{ACTIONS.importCard}</button>
+                        <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard} open={modalType === ACTIONS.importCard} onClose={() => setModalType(null)}
+                                         onUpload={(file) => postFileRequest('statements/import', file)}/>
 
-                        <button onClick={() => setModalType(ACTIONS.importCard0296)}>{ACTIONS.importCard0296}</button>
-                        <FileUploadModal key={'4' + modalType} name={ACTIONS.importCard0296} open={modalType === ACTIONS.importCard0296} onClose={() => setModalType(null)}
-                                         onUpload={(file) => postFileRequest('statements/card0296', file)}/>
                         <button onClick={() => postRequest('statements/populateExpenseTasks')}>
                             Populate CU Expense Tasks
                         </button>
