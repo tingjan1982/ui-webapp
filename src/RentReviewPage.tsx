@@ -118,6 +118,7 @@ const RentReviewPage = ({apiEndpoint}: RentReviewPageProps) => {
     const [items, setItems] = useState<unknown[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+    const currentYear = new Date().getFullYear()
 
     useEffect(() => {
         const fetchLeasesForReview = async () => {
@@ -146,7 +147,7 @@ const RentReviewPage = ({apiEndpoint}: RentReviewPageProps) => {
     return (
         <section className="mainPanel">
             <h2>Rent Reviews</h2>
-            <p>Leases that are up for rent review this year {}.</p>
+            <p>Leases that are up for rent review in {currentYear}.</p>
 
             {loading && <p>Loading lease review data from backend...</p>}
             {error && <p><span className="error">Error: </span>{error}</p>}

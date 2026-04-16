@@ -48,6 +48,36 @@
     margin: 0;
 }
 
+.actionButton {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.actionTypeTag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 0.2rem 0.5rem;
+}
+
+.uploadAction .actionTypeTag {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(147, 197, 253, 0.45);
+}
+
+.directAction .actionTypeTag {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+    border: 1px solid rgba(110, 231, 183, 0.45);
+}
+
 .activeButton {
     border-color: #646cff;
 }
@@ -117,6 +147,60 @@
 
 .leaseTable th {
     font-weight: 700;
+}
+
+.fileUploadOverlay {
+    background-color: rgba(0, 0, 0, 0.45);
+    position: fixed;
+    inset: 0;
+}
+
+.fileUploadContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(560px, calc(100vw - 2rem));
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #111827;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, 0.25);
+}
+
+.fileUploadInput {
+    margin-top: 0.75rem;
+}
+
+.fileUploadActions {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.625rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .fileUploadContent {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background-color: #1f2937;
+        color: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 16px 42px rgba(0, 0, 0, 0.45);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .uploadAction .actionTypeTag {
+        background: rgba(37, 99, 235, 0.12);
+        color: #1d4ed8;
+        border: 1px solid rgba(37, 99, 235, 0.35);
+    }
+
+    .directAction .actionTypeTag {
+        background: rgba(22, 163, 74, 0.12);
+        color: #15803d;
+        border: 1px solid rgba(22, 163, 74, 0.35);
+    }
 }
 
 @media (max-width: 900px) {

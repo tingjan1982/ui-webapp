@@ -120,30 +120,42 @@ function App() {
 
                 <div className="actionGroup">
                     <h3>Transaction Functions</h3>
-                    <button onClick={() => setModalType(ACTIONS.updateCashPosition)}>{ACTIONS.updateCashPosition}</button>
+                    <button className="actionButton uploadAction" onClick={() => setModalType(ACTIONS.updateCashPosition)}>
+                        <span>{ACTIONS.updateCashPosition}</span>
+                        <span className="actionTypeTag">Upload</span>
+                    </button>
                     <FileUploadModal key={'1' + modalType} name={ACTIONS.updateCashPosition} open={modalType === ACTIONS.updateCashPosition}
                                      onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)}/>
 
-                    <button onClick={() => setModalType('Bank Transaction')}>Sync Bank Transactions</button>
+                    <button className="actionButton uploadAction" onClick={() => setModalType('Bank Transaction')}>
+                        <span>Sync Bank Transactions</span>
+                        <span className="actionTypeTag">Upload</span>
+                    </button>
                     <FileUploadModal key={'2' + modalType} name={ACTIONS.syncBankTransactions} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)}
                                      onUpload={(file) => postFileRequest('transactions/sync', file)}/>
 
-                    <button onClick={() => postRequest('sheets/syncPayments')}>
-                        Sync Planned Payments
+                    <button className="actionButton directAction" onClick={() => postRequest('sheets/syncPayments')}>
+                        <span>Sync Planned Payments</span>
+                        <span className="actionTypeTag">Run</span>
                     </button>
                 </div>
 
                 <div className="actionGroup">
                     <h3>Cost Analysis Functions</h3>
-                    <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
-                        Populate RBG Invoices
+                    <button className="actionButton directAction" onClick={() => postRequest('invoices/populateRBGInvoices')}>
+                        <span>Populate RBG Invoices</span>
+                        <span className="actionTypeTag">Run</span>
                     </button>
-                    <button onClick={() => setModalType(ACTIONS.importCard)}>{ACTIONS.importCard}</button>
+                    <button className="actionButton uploadAction" onClick={() => setModalType(ACTIONS.importCard)}>
+                        <span>{ACTIONS.importCard}</span>
+                        <span className="actionTypeTag">Upload</span>
+                    </button>
                     <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard} open={modalType === ACTIONS.importCard} onClose={() => setModalType(null)}
                                      onUpload={(file) => postFileRequest('statements/import', file)}/>
 
-                    <button onClick={() => postRequest('statements/populateExpenseTasks')}>
-                        Populate CU Expense Tasks
+                    <button className="actionButton directAction" onClick={() => postRequest('statements/populateExpenseTasks')}>
+                        <span>Populate CU Expense Tasks</span>
+                        <span className="actionTypeTag">Run</span>
                     </button>
                 </div>
             </aside>

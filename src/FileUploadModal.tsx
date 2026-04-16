@@ -26,29 +26,16 @@ const FileUploadModal: React.FC<FileUploadModalProps> = ({open, onClose, onUploa
     return (
         <Dialog.Root open={open} onOpenChange={(state) => !state && onClose()}>
             <Dialog.Portal>
-                <Dialog.Overlay style={{
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    position: 'fixed',
-                    inset: 0
-                }}/>
-                <Dialog.Content style={{
-                    background: 'gray',
-                    borderRadius: 8,
-                    padding: 20,
-                    position: 'fixed',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    minWidth: 500
-                }}>
+                <Dialog.Overlay className="fileUploadOverlay"/>
+                <Dialog.Content className="fileUploadContent">
                     <Dialog.Title>{name}</Dialog.Title>
                     <Dialog.Description>
                         Select a file and click upload to run the function.
                     </Dialog.Description>
-                    <input type="file" onChange={handleFileChange}/>
+                    <input className="fileUploadInput" type="file" onChange={handleFileChange}/>
                     {file && <p>Selected: {file.name}</p>}
 
-                    <div style={{marginTop: 20, display: 'flex', justifyContent: 'flex-end', gap: 10}}>
+                    <div className="fileUploadActions">
                         <Dialog.Close asChild>
                             <button>Cancel</button>
                         </Dialog.Close>
