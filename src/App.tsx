@@ -7,6 +7,7 @@ import FileUploadModal from "./FileUploadModal.tsx";
 import {ACTIONS} from "./constants.tsx";
 import 'nprogress/nprogress.css';
 import NProgress from 'nprogress';
+import RentReviewPage from "./RentReviewPage.tsx";
 
 
 type ApiResponse = {
@@ -22,12 +23,14 @@ const apiHost = import.meta.env.VITE_API_HOST
 const apiPort = import.meta.env.VITE_API_PORT
 const apiEndpoint = `${apiHost}:${apiPort}`
 
+type Page = 'dashboard' | 'rent-review'
 
 function App() {
     const [response, setResponse] = useState<ApiResponse | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [status, setStatus] = useState<string | null>(null)
     const [modalType, setModalType] = useState<string | null>(null)
+    const [page, setPage] = useState<Page>('dashboard')
 
 
     const makeApiCall = async (
@@ -99,80 +102,86 @@ function App() {
     }, []);
 
     return (
-        <>
-            <div className="logoContainer">
-                <img src={cfLogo} className="logo" alt="Central Fair Group logo"/>
-            </div>
-            <h1>UI Dashboard</h1>
-            <p>Use the following links to access information</p>
+        <div className="dashboardLayout">
+            <aside className="sidebar">
+                <div className="sidebarHeader">
+                    <img src={cfLogo} className="logo" alt="Central Fair Group logo"/>
+                </div>
 
-            {/*<div>
-                <a href="https://vite.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo"/>
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img src={reactLogo} className="logo react" alt="React logo"/>
-                </a>
-            </div>*/}
-            <div className="container">
-                <div className="column">
+                <div className="actionGroup">
+                    <h3>Pages</h3>
+                    <button className={page === 'dashboard' ? 'activeButton' : ''} onClick={() => setPage('dashboard')}>
+                        Dashboard Home
+                    </button>
+                    <button className={page === 'rent-review' ? 'activeButton' : ''} onClick={() => setPage('rent-review')}>
+                        {ACTIONS.rentReview}
+                    </button>
+                </div>
+
+                <div className="actionGroup">
                     <h3>Transaction Functions</h3>
-                    <a target="_blank" rel="noopener noreferrer"
-                       href="https://docs.google.com/spreadsheets/d/106RJju-J-NNvnu_TdfbxbZZUFUgIAp_Xheu3KKzE2dU/edit?pli=1&gid=638336203#gid=638336203">
-                        Cash Position
-                    </a>
-                    <div className="column">
+                    <button onClick={() => setModalType(ACTIONS.updateCashPosition)}>{ACTIONS.updateCashPosition}</button>
+                    <FileUploadModal key={'1' + modalType} name={ACTIONS.updateCashPosition} open={modalType === ACTIONS.updateCashPosition}
+                                     onClose={() => setModalType(null)} onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)}/>
 
-                        <button onClick={() => setModalType(ACTIONS.updateCashPosition)}>{ACTIONS.updateCashPosition}</button>
-                        <FileUploadModal key={'1' + modalType} name={ACTIONS.updateCashPosition} open={modalType === ACTIONS.updateCashPosition} onClose={() => setModalType(null)}
-                                         onUpload={(file) => postFileRequest('sheets/updateCashPosition', file)}/>
+                    <button onClick={() => setModalType('Bank Transaction')}>Sync Bank Transactions</button>
+                    <FileUploadModal key={'2' + modalType} name={ACTIONS.syncBankTransactions} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)}
+                                     onUpload={(file) => postFileRequest('transactions/sync', file)}/>
 
-                        <button onClick={() => setModalType('Bank Transaction')}>Sync Bank Transactions</button>
-                        <FileUploadModal key={'2' + modalType} name={ACTIONS.syncBankTransactions} open={modalType === 'Bank Transaction'} onClose={() => setModalType(null)}
-                                         onUpload={(file) => postFileRequest('transactions/sync', file)}/>
-
-                        <button onClick={() => postRequest('sheets/syncPayments')}>
-                            Sync Planned Payments
-                        </button>
-                    </div>
+                    <button onClick={() => postRequest('sheets/syncPayments')}>
+                        Sync Planned Payments
+                    </button>
                 </div>
-                <div className="column">
+
+                <div className="actionGroup">
                     <h3>Cost Analysis Functions</h3>
-                    <a target="_blank" rel="noopener noreferrer"
-                       href="https://docs.google.com/spreadsheets/d/1XLHMC8oM8jnfCtdh_KoFmd871lzaIBGOUVQATvzZFoE/edit?pli=1&gid=345099240#gid=345099240">
-                        Cost Analysis
-                    </a>
-                    <div className="column">
-                        <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
-                            Populate RBG Invoices
-                        </button>
-                        <button onClick={() => setModalType(ACTIONS.importCard)}>{ACTIONS.importCard}</button>
-                        <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard} open={modalType === ACTIONS.importCard} onClose={() => setModalType(null)}
-                                         onUpload={(file) => postFileRequest('statements/import', file)}/>
+                    <button onClick={() => postRequest('invoices/populateRBGInvoices')}>
+                        Populate RBG Invoices
+                    </button>
+                    <button onClick={() => setModalType(ACTIONS.importCard)}>{ACTIONS.importCard}</button>
+                    <FileUploadModal key={'3' + modalType} name={ACTIONS.importCard} open={modalType === ACTIONS.importCard} onClose={() => setModalType(null)}
+                                     onUpload={(file) => postFileRequest('statements/import', file)}/>
 
-                        <button onClick={() => postRequest('statements/populateExpenseTasks')}>
-                            Populate CU Expense Tasks
-                        </button>
-                    </div>
+                    <button onClick={() => postRequest('statements/populateExpenseTasks')}>
+                        Populate CU Expense Tasks
+                    </button>
                 </div>
-            </div>
+            </aside>
 
-            <div className="card">
-                <h3>Response Pane</h3>
-                <p>
-                    {response?.message}
-                </p>
-                <p>
-                    {error && <><span className="error">Error: </span>{error}</>}
-                </p>
-            </div>
-            <p>
-                Endpoint: {apiEndpoint} Health: {status} App Version: {__APP_VERSION__}
-            </p>
-            <p className="read-the-docs">
-                Developed in house by Joe Lin 2025
-            </p>
-        </>
+            <main className="mainPane">
+                <div className="mainContent">
+                    {page === 'dashboard' && (
+                        <section className="mainPanel">
+                            <h2>UI Dashboard</h2>
+                            <p>This area is reserved for additional pages.</p>
+                        </section>
+                    )}
+
+                    {page === 'rent-review' && (
+                        <RentReviewPage apiEndpoint={apiEndpoint}/>
+                    )}
+                </div>
+
+                <section className="mainPanel responsePane">
+                    <h3>Response Pane</h3>
+                    <p>
+                        {response?.message}
+                    </p>
+                    <p>
+                        {error && <><span className="error">Error: </span>{error}</>}
+                    </p>
+                </section>
+
+                <footer className="appFooter">
+                    <p className="footerMeta">
+                        Endpoint: {apiEndpoint} Health: {status} App Version: {__APP_VERSION__}
+                    </p>
+                    <p className="read-the-docs">
+                        Developed in house by Joe Lin 2025
+                    </p>
+                </footer>
+            </main>
+        </div>
     )
 }
 

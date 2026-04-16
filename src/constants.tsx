@@ -3,5 +3,6 @@ export const ACTIONS = {
     syncBankTransactions: 'Sync Bank Transactions',
     syncPlannedPayments: 'Sync Planned Payments',
     populateRBGInvoices: 'Populate RBG Invoices',
-    importCard: 'Import Credit Card Statement'
+    importCard: 'Import Credit Card Statement',
+    rentReview: 'Rent Review'
 }

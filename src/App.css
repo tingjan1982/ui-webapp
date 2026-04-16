@@ -1,63 +1,91 @@
 #root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    text-align: center;
+    min-height: 100vh;
+}
+
+.dashboardLayout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+}
+
+.sidebar {
+    border-right: 1px solid #e5e7eb;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.sidebarHeader {
+    text-align: left;
+}
+
+.sidebarHeader h1 {
+    margin: 0;
+    font-size: 1.75rem;
+}
+
+.sidebarHeader p {
+    margin-top: 0.5rem;
+    color: #6b7280;
 }
 
 .logo {
-    height: 10em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+    width: 140px;
+    height: auto;
+    margin-bottom: 0.5rem;
 }
 
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-.logoContainer {
-    background-color: #f9f9f9;
-    width: 350px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-@keyframes logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-        animation: logo-spin infinite 20s linear;
-    }
-}
-
-.card {
-    padding: 1em;
-}
-
-.container {
+.actionGroup {
     display: flex;
-    gap: 2rem;
-    justify-content: space-between;
-    padding: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: left;
 }
 
-.column {
+.actionGroup h3 {
+    margin: 0;
+}
+
+.activeButton {
+    border-color: #646cff;
+}
+
+.mainPane {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mainContent {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.mainPanel {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: left;
+    background: transparent;
+}
+
+.responsePane {
+    margin-top: auto;
+}
+
+.appFooter {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.footerMeta {
+    margin: 0;
+    color: #6b7280;
 }
 
 .error {
@@ -66,4 +94,38 @@
 
 .read-the-docs {
     color: #888;
+    margin: 0.25rem 0 0;
+}
+
+.tableWrap {
+    margin-top: 1rem;
+    overflow-x: auto;
+}
+
+.leaseTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaseTable th,
+.leaseTable td {
+    text-align: left;
+    padding: 0.65rem 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    white-space: nowrap;
+}
+
+.leaseTable th {
+    font-weight: 700;
+}
+
+@media (max-width: 900px) {
+    .dashboardLayout {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
 }
