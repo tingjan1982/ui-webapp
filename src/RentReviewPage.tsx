@@ -71,6 +71,21 @@ const getNestedValue = (source: Record<string, unknown>, path: string[]): unknow
     return current
 }
 
+const dateFormatter = new Intl.DateTimeFormat('en-GB')
+
+const formatDateToDdMmYyyy = (value: string): string => {
+    if (!value || value === '-') {
+        return '-'
+    }
+
+    const parsed = new Date(value)
+    if (Number.isNaN(parsed.getTime())) {
+        return value
+    }
+
+    return dateFormatter.format(parsed)
+}
+
 const toLeaseRow = (item: unknown): LeaseRow => {
     if (!item || typeof item !== 'object') {
         return {
@@ -106,7 +121,7 @@ const toLeaseRow = (item: unknown): LeaseRow => {
 
     return {
         tenant: getTextValue(lease, ['tenant']),
-        rentReviewDate: getTextValue(lease, ['rentReviewDate']),
+        rentReviewDate: formatDateToDdMmYyyy(getTextValue(lease, ['rentReviewDate'])),
         reviewType: topLevelReviewType,
         newRent: nestedNewRent,
         adoptedCpi: nestedAdoptedCpi,
@@ -118,6 +133,10 @@ const RentReviewPage = ({apiEndpoint}: RentReviewPageProps) => {
     const [items, setItems] = useState<unknown[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
+    const [email, setEmail] = useState<string>('')
+    const [emailActionMessage, setEmailActionMessage] = useState<string | null>(null)
+    const [emailActionError, setEmailActionError] = useState<string | null>(null)
+    const [emailSubmitting, setEmailSubmitting] = useState<boolean>(false)
     const currentYear = new Date().getFullYear()
 
     useEffect(() => {
@@ -144,10 +163,58 @@ const RentReviewPage = ({apiEndpoint}: RentReviewPageProps) => {
         fetchLeasesForReview()
     }, [apiEndpoint]);
 
+    const submitReviewEmail = async () => {
+        const trimmedEmail = email.trim()
+        const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)
+        if (!isEmailValid) {
+            setEmailActionError('Please enter a valid email address.')
+            setEmailActionMessage(null)
+            return
+        }
+
+        try {
+            setEmailSubmitting(true)
+            setEmailActionError(null)
+            setEmailActionMessage(null)
+
+            const res = await fetch(`${apiEndpoint}/services/rentReviewSummary/email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: trimmedEmail})
+            })
+
+            if (!res.ok) {
+                throw new Error(`Unable to send email (${res.status})`)
+            }
+
+            setEmailActionMessage(`Email has been sent: ${trimmedEmail}`)
+        } catch (err: any) {
+            setEmailActionError(err.message ?? 'Unable to send email')
+        } finally {
+            setEmailSubmitting(false)
+        }
+    }
+
     return (
         <section className="mainPanel">
             <h2>Rent Reviews</h2>
             <p>Leases that are up for rent review in {currentYear}.</p>
+            <div className="rentReviewActions">
+                <input
+                    className="rentReviewEmailInput"
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <button onClick={submitReviewEmail} disabled={emailSubmitting}>
+                    {emailSubmitting ? 'Sending...' : 'Send Rent Review'}
+                </button>
+            </div>
+            {emailActionMessage && <p>{emailActionMessage}</p>}
+            {emailActionError && <p><span className="error">Error: </span>{emailActionError}</p>}
 
             {loading && <p>Loading lease review data from backend...</p>}
             {error && <p><span className="error">Error: </span>{error}</p>}

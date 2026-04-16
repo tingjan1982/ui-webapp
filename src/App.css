@@ -149,6 +149,37 @@
     font-weight: 700;
 }
 
+.rentReviewActions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+.rentReviewEmailInput {
+    min-width: 360px;
+    min-height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 12px;
+    padding: 0.75rem 0.95rem;
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.rentReviewEmailInput::placeholder {
+    color: #9ca3af;
+}
+
+.rentReviewEmailInput:focus {
+    outline: none;
+    border-color: #646cff;
+    box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+}
+
 .fileUploadOverlay {
     background-color: rgba(0, 0, 0, 0.45);
     position: fixed;
@@ -201,6 +232,22 @@
         color: #15803d;
         border: 1px solid rgba(22, 163, 74, 0.35);
     }
+
+    .rentReviewEmailInput {
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        color: #111827;
+    }
+
+    .rentReviewEmailInput::placeholder {
+        color: #94a3b8;
+    }
+
+    .rentReviewEmailInput:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+        background: #ffffff;
+    }
 }
 
 @media (max-width: 900px) {
@@ -211,5 +258,9 @@
     .sidebar {
         border-right: none;
         border-bottom: 1px solid #e5e7eb;
+    }
+
+    .rentReviewEmailInput {
+        min-width: 100%;
     }
 }
