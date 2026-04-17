@@ -7,5 +7,11 @@ export default defineConfig({
   plugins: [react()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version)
+  },
+  server: {
+    allowedHosts: [
+      'app.rabybayharbour.online',
+      'dashboard.rabybayharbour.online'
+    ]
   }
 })
