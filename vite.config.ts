@@ -10,7 +10,7 @@ export default defineConfig({
   },
   server: {
     allowedHosts: [
-      'app.rabybayharbour.online',
+      'dashboard.rabybayharbour.com.au',
       'dashboard.rabybayharbour.online'
     ]
   }
