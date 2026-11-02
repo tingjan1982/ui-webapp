@@ -21,7 +21,7 @@ type ErrorResponse = {
 
 const apiHost = import.meta.env.VITE_API_HOST
 const apiPort = import.meta.env.VITE_API_PORT
-const apiEndpoint = `${apiHost}:${apiPort}`
+const apiEndpoint = apiHost.startsWith('/') ? apiHost : `${apiHost}${apiPort ? `:${apiPort}` : ''}`
 
 type Page = 'dashboard' | 'rent-review'
 
